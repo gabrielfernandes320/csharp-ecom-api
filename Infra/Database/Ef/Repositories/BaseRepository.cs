@@ -28,14 +28,14 @@ public class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity
 
     public async Task Delete(Guid id)
     {
-        var entity = await _entities.FindAsync(id);
+        var entity = await FindById(id);
 
         if(entity == null)
         {
             throw new NotFoundException();
         }
 
-        _entities.Remove((await FindById(id))!);
+        _entities.Remove(entity);
         await _context.SaveChangesAsync();
     }
 

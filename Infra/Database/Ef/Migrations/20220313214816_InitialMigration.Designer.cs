@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infra.Database.Ef.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20220313043107_InitialMigration")]
+    [Migration("20220313214816_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

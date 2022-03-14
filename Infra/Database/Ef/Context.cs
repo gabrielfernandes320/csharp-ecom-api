@@ -6,9 +6,12 @@ namespace Infra.Database.Ef
 {
     public class Context : DbContext
     {
-        public Context(DbContextOptions<Context> options)
+        private readonly IConfiguration _configuration;
+        
+        public Context(DbContextOptions<Context> options, IConfiguration configuration)
             : base(options)
         {
+            _configuration = configuration;
         }
 
         public DbSet<User> Users { get; set; }

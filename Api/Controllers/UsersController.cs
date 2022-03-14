@@ -1,42 +1,50 @@
-﻿using System.Net;
-using Domain.Common.Exceptions;
+﻿using Domain.Users.Commands;
+using Domain.Users.Dtos;
 using Domain.Users.Entities;
-using Infra.Http;
+using Domain.Users.Queries;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class UsersController : ControllerBase, IController<User>
+public class UsersController : ControllerBase
 {
-    [HttpGet]
-    public Task<ICollection<User>> GetAsync()
+    private readonly IMediator _mediator;
+
+    public UsersController(IMediator mediator)
     {
-        throw new NotFoundException("nao achou!!!", parameter: "id");
+        _mediator = mediator;
+    }
+
+    [HttpGet]
+    public async Task<ICollection<User>> GetAsync()
+    {
+        return (ICollection<User>) await _mediator.Send(new ListUserQuery());
     }
 
     [HttpGet("{id:guid}")]
-    public Task<User> GetAsync(Guid id)
+    public async Task<FindUserResponseDto> GetAsync(Guid id)
     {
-        throw new NotImplementedException();
+        return await _mediator.Send(new FindUserQuery(id));
     }
 
     [HttpPost]
-    public Task<User> PostAsync([FromBody] User user)
+    public async Task<CreateUserResponseDto> PostAsync([FromBody] CreateUserCommand user)
     {
-        throw new NotImplementedException();
+        return await _mediator.Send(user);
     }
 
     [HttpPatch("{id:guid}")]
-    public Task<User> PutAsync(Guid id, [FromBody] User user)
+    public async Task<UpdateUserResponseDto> PatchAsync(Guid id, [FromBody] UpdateUserCommand user)
     {
-        throw new NotImplementedException();
+        return await _mediator.Send(user with {Id = id});
     }
 
     [HttpDelete("{id:guid}")]
-    public Task DeleteAsync(Guid id)
+    public async Task DeleteAsync(Guid id)
     {
-        throw new NotImplementedException();
+        await _mediator.Send(new DeleteUserCommand(id));
     }
 }
